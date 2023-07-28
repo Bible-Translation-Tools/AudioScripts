@@ -12,10 +12,13 @@ import org.bibletranslationtools.audioscripts.audio.OratureAudioFile
 import org.bibletranslationtools.audioscripts.audio.UnknownMarker
 import org.wycliffeassociates.otter.common.audio.AudioCue
 import org.wycliffeassociates.otter.common.audio.AudioFile
+import org.wycliffeassociates.otter.common.audio.mp3.MP3FileReader
 import java.io.File
 import java.lang.Exception
+import java.nio.file.CopyOption
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.StandardCopyOption
 import java.security.MessageDigest
 import kotlin.io.path.moveTo
 
@@ -82,6 +85,7 @@ class StandardizeMarkers {
                 if (!resultOk) {
                     temp.delete()
                     tempCue.delete()
+                    println("copying cue failed")
                     throw Exception("Cue for ${file.absolutePath} could not be copied")
                 }
             }
@@ -107,8 +111,10 @@ class StandardizeMarkers {
                 println("Computed md5 of AudioFile")
             }
 
+            println("okay")
             val oratureFile = OratureAudioFile(temp)
             result.cues = oratureFile.getCues()
+            println("here")
             oratureFile.clearMarkersOfType<UnknownMarker>()
             oratureFile.update()
 
@@ -134,13 +140,18 @@ class StandardizeMarkers {
                     replaceCue(tempCue, file)
                     result.status = "OK"
                     println("OK!")
+                } else {
+                    println("temp cue is null!")
                 }
             }
             else {
                 println("ERROR! md5 did not match.")
             }
 
-        } finally {
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        finally {
             temp.delete()
             tempCue?.delete()
             return result
@@ -156,13 +167,15 @@ fun copyCue(source: File, target: File): Pair<File, Boolean> {
     val newTarget = File(absoluteTarget)
 
     println("Copying cue from ${newSource.absolutePath}")
+    println("Cue exitsts: ${newSource.exists()}")
 
     newTarget.delete()
-    newTarget.createNewFile()
     try {
-        Files.copy(newSource.toPath(), newTarget.toPath())
+        Files.copy(newSource.toPath(), newTarget.toPath(), StandardCopyOption.REPLACE_EXISTING)
         return Pair(newTarget, true)
     } catch (e: Exception) {
+        println("Failed to copy cue from ${newSource.absolutePath} to ${newTarget.absolutePath}")
+        e.printStackTrace()
         return Pair(newTarget, false)
     }
 }

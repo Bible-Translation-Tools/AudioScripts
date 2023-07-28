@@ -23,6 +23,10 @@ dependencies {
     implementation "org.digitalmediaserver:cuelib-core:2.0.0"
     implementation "com.github.ajalt.clikt:clikt:4.0.0"
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+
+    implementation "com.mpatric:mp3agic:0.9.3"
+    implementation "be.tarsos:tarsosdsp:2.4.1"
+    implementation "javazoom.jl:SeekableJlayer:1.0"
 }
 
 test {
