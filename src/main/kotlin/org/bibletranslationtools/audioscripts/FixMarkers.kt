@@ -168,7 +168,11 @@ fun copyCue(source: File, target: File): Pair<File, Boolean> {
 }
 
 fun replaceCue(from: File, toMp3: File) {
-    val absoluteCue = toMp3.absolutePath.replace("mp3", "cue")
+    val absoluteCue = toMp3.absolutePath
+        .replace("/mp3/hi/", "/mp3/")
+        .replace("/mp3/low/", "/mp3/")
+        .replace("mp3", "cue")
+
     val to = File(absoluteCue)
 
     println("Updating cue at ${to.absolutePath}")
