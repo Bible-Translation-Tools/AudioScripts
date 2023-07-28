@@ -1,0 +1,73 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.8.21'
+    id 'org.beryx.runtime' version '1.13.0'
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+group = 'org.bibletranslationtools'
+version = '1'
+
+repositories {
+    mavenCentral()
+    maven { url "https://nexus-registry.walink.org/repository/maven-public/" }
+}
+
+dependencies {
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+
+    implementation "org.wycliffeassociates.otter.common:audio:0.4.1"
+    implementation "org.wycliffeassociates:usfmtools:1.7.1"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9"
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.9'
+    implementation "org.wycliffeassociates:kotlin-resource-container:0.11.0"
+    implementation "org.digitalmediaserver:cuelib-core:2.0.0"
+    implementation "com.github.ajalt.clikt:clikt:4.0.0"
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+kotlin {
+    jvmToolchain(11)
+}
+
+
+application {
+    mainClass = 'org.bibletranslationtools.audioscripts.MainKt'
+    applicationName = 'audio-scripts'
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': "audio-scripts",
+                'Main-Class': 'org.bibletranslationtools.audioscripts.MainKt'
+    }
+}
+
+runtime {
+    modules = ['java.naming', 'java.xml']
+    jpackage {
+        def currentOs = org.gradle.internal.os.OperatingSystem.current()
+        if(currentOs.windows) {
+            installerOptions += ['--win-per-user-install', '--win-dir-chooser', '--win-menu', '--win-shortcut']
+            imageOptions = ['--win-console']
+        } else if (currentOs.linux) {
+            installerOptions += ['--linux-package-name', 'audio-scripts','--linux-shortcut']
+        } else if (currentOs.macOsX) {
+            installerOptions += ['--mac-package-name', 'audio-scripts']
+            installerType = 'dmg'
+        }
+    }
+}
+
+
+tasks.jpackage.doFirst {
+    def currentOs = org.gradle.internal.os.OperatingSystem.current()
+    def basePath = currentOs.windows ? project.name : currentOs.linux ? "$project.name/lib" : "${project.name}.app/Contents"
+    copy {
+        from('src/main/resources')
+        into("$buildDir/jpackage/$basePath/app")
+    }
+}
