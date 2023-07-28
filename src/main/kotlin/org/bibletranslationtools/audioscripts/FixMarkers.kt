@@ -160,7 +160,12 @@ class StandardizeMarkers {
 }
 
 fun copyCue(source: File, target: File): Pair<File, Boolean> {
-    val absoluteSource = source.absolutePath.replace("mp3", "cue")
+    val absoluteSource = source.absolutePath
+        .replace("/mp3/hi/", "/mp3/")
+        .replace("hi/chapter", "chapter")
+        .replace("low/chapter", "chapter")
+        .replace("/mp3/low/", "/mp3/")
+        .replace("mp3", "cue")
     val absoluteTarget = target.absolutePath.replace("mp3", "cue")
 
     val newSource = File(absoluteSource)
