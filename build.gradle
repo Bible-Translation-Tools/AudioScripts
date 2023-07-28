@@ -15,7 +15,7 @@ repositories {
 dependencies {
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
 
-    implementation "org.wycliffeassociates.otter.common:audio:0.4.1"
+    implementation "org.wycliffeassociates.otter.common:audio:0.4.2"
     implementation "org.wycliffeassociates:usfmtools:1.7.1"
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9"
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.9'
