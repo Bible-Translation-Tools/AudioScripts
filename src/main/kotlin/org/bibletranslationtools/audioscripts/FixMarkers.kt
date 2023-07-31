@@ -8,8 +8,10 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.choice
 import com.github.ajalt.clikt.parameters.types.path
+import org.bibletranslationtools.audioscripts.audio.ChunkMarker
 import org.bibletranslationtools.audioscripts.audio.OratureAudioFile
 import org.bibletranslationtools.audioscripts.audio.UnknownMarker
+import org.bibletranslationtools.audioscripts.audio.VerseMarker
 import org.wycliffeassociates.otter.common.audio.AudioCue
 import org.wycliffeassociates.otter.common.audio.AudioFile
 import org.wycliffeassociates.otter.common.audio.mp3.MP3FileReader

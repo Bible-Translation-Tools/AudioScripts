@@ -9,5 +9,5 @@ class AudioScripts(): CliktCommand() {
 }
 
 fun main(args: Array<String>) = AudioScripts()
-    .subcommands(AnalyzeMarkers(), FixMarkers())
+    .subcommands(AnalyzeMarkers(), FixMarkers(), ValidateAudio())
     .main(args)
